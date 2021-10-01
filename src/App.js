@@ -4,6 +4,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Canceled from "./pages/Canceled";
 import Confirmed from "./pages/Confirmed";
 import Pending from "./pages/Pending";
+import Login from './pages/Login'
 
 
 function App() {
@@ -11,7 +12,7 @@ function App() {
     <Layout>
       <Switch>
         <Route path="/" exact>
-          <Appointments/>
+          <Login/>
         </Route>
         <PrivateRoute path='/pending' component={Pending}/>
         <PrivateRoute path='/confirmed' component={Confirmed}/>
