@@ -111,7 +111,7 @@ export function DcContextProvider(props) {
       );
       setUserPending(appointments.filter((ap) => ap.status === "pending"));
       setUserConfirmed(appointments.filter((ap) => ap.status === "confirmed"));
-      setUserPending(appointments.filter((ap) => ap.status === "canceled"));
+      setUserCanceled(appointments.filter((ap) => ap.status === "canceled"));
     }
     setUserManager({...manager, clinicName: userClinics.find((cl) => manager.clinicId === cl.id).title});
   }
