@@ -18,7 +18,6 @@ export function DcContextProvider(props) {
 
   const [userAppointments, setUserAppointments] = useState([]);
   const [userClients, setUserClients] = useState([]);
-  const [userClinics, setUserClinics] = useState([]);
   const [userDentists, setUserDentists] = useState([]);
   const [userManagers, setUserManagers] = useState([]);
 
@@ -28,11 +27,6 @@ export function DcContextProvider(props) {
   const [userManager, setUserManager] = useState(undefined);
 
   useEffect(() => {
-    async function fetchClinics() {
-      let clinics = await fetch(api + "clinics");
-      clinics = await clinics.json();
-      setUserClinics(clinics);
-    }
     async function fetchClients() {
       let clients = await fetch(api + "clients");
       clients = await clients.json();
@@ -55,7 +49,6 @@ export function DcContextProvider(props) {
     }
     fetchAppointments();
     fetchClients();
-    fetchClinics();
     fetchDentists();
     fetchManagers();
   }, []);
