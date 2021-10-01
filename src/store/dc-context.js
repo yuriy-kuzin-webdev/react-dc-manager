@@ -20,6 +20,7 @@ export function DcContextProvider(props) {
   const [userClients, setUserClients] = useState([]);
   const [userDentists, setUserDentists] = useState([]);
   const [userManagers, setUserManagers] = useState([]);
+  const [userClinics, setUserClinics] = useState([]);
 
   const [userPending, setUserPending] = useState([]);
   const [userConfirmed, setUserConfirmed] = useState([]);
@@ -47,10 +48,16 @@ export function DcContextProvider(props) {
       managers = await managers.json();
       setUserManagers(managers);
     }
+    async function fetchClinics() {
+        let clinics = await fetch(api + "clinics");
+        clinics = await clinics.json();
+        setUserClinics(clinics);
+      }
     fetchAppointments();
     fetchClients();
     fetchDentists();
     fetchManagers();
+    fetchClinics();
   }, []);
 
   function handleConfirmAppointment(appointment) {
@@ -106,7 +113,7 @@ export function DcContextProvider(props) {
       setUserConfirmed(appointments.filter((ap) => ap.status === "confirmed"));
       setUserPending(appointments.filter((ap) => ap.status === "canceled"));
     }
-    setUserManager(manager);
+    setUserManager({...manager, clinicName: userClinics.find((cl) => manager.clinicId === cl.id).title});
   }
 
   const context = {
