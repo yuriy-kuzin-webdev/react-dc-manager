@@ -10,6 +10,12 @@ export default function Appointment({
   onConfirm,
   onCancel,
 }) {
+  function onConfirmHandler() {
+    onConfirm(appointment);
+  }
+  function onCancelHandler() {
+    onCancel(appointment);
+  }
   return (
     <tr>
       <td>{appointment.id}</td>
@@ -33,20 +39,22 @@ export default function Appointment({
         </Accordion>
       </td>
       <td>{appointment.status}</td>
-      <td width="10%">
-        <ButtonGroup>
-          {onConfirm && (
-            <Button variant="success" onClick={onConfirm}>
-              Confirm
-            </Button>
-          )}
-          {onCancel && (
-            <Button variant="danger" onClick={onCancel}>
-              Cancel
-            </Button>
-          )}
-        </ButtonGroup>
-      </td>
+      {(onConfirm || onCancel) && (
+        <td width="10%">
+          <ButtonGroup>
+            {onConfirm && (
+              <Button variant="success" onClick={onConfirmHandler}>
+                Confirm
+              </Button>
+            )}
+            {onCancel && (
+              <Button variant="danger" onClick={onCancelHandler}>
+                Cancel
+              </Button>
+            )}
+          </ButtonGroup>
+        </td>
+      )}
     </tr>
   );
 }
