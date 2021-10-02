@@ -63,7 +63,7 @@ export function DcContextProvider(props) {
   function handleConfirmAppointment(appointment) {
     fetch(api + "appointments/" + appointment.id, {
       method: "PUT",
-      body: JSON.stringify(appointment),
+      body: JSON.stringify({...appointment, status:'confirmed'}),
       headers: {
         "Content-Type": "application/json",
       },
@@ -79,7 +79,7 @@ export function DcContextProvider(props) {
   function handleCancelAppointment(appointment) {
     fetch(api + "appointments/" + appointment.id, {
       method: "PUT",
-      body: JSON.stringify(appointment),
+      body: JSON.stringify({...appointment, status:'canceled'}),
       headers: {
         "Content-Type": "application/json",
       },
