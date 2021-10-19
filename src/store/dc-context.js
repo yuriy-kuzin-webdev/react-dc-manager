@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 
 const DcContext = createContext({
   languageCode: 0,
-  setLanguageCode : (code) => {},
+  setLanguageCode: (code) => {},
 
   pending: [],
   confirmed: [],
@@ -11,6 +11,8 @@ const DcContext = createContext({
   dentists: [],
   clients: [],
 
+  addClient: (client) => {},
+  addAppointment: (appointment) => {},
   confirmAppointment: (appointment) => {},
   cancelAppointment: (appointment) => {},
   login: (userName, password) => {},
@@ -54,10 +56,10 @@ export function DcContextProvider(props) {
       setUserManagers(managers);
     }
     async function fetchClinics() {
-        let clinics = await fetch(api + "clinics");
-        clinics = await clinics.json();
-        setUserClinics(clinics);
-      }
+      let clinics = await fetch(api + "clinics");
+      clinics = await clinics.json();
+      setUserClinics(clinics);
+    }
     fetchAppointments();
     fetchClients();
     fetchDentists();
@@ -65,8 +67,53 @@ export function DcContextProvider(props) {
     fetchClinics();
   }, []);
 
+  function addData(data, controllerName, setStateCallback) {
+    fetch(api + controllerName, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        setStateCallback((prev) => {
+          return prev.concat(json);
+        });
+      });
+  }
+
+  function handleAddAppointment(appointment) {
+    fetch(api + "appointments", {
+      method: "POST",
+      body: JSON.stringify(appointment),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        setUserAppointments((prev) => {
+          return prev.concat(json);
+        });
+        if (json.status === 0) {
+          setUserPending((prev) => {
+            return prev.concat(json);
+          });
+        } else if (json.status === 1) {
+          setUserConfirmed((prev) => {
+            return prev.concat(json);
+          });
+        }
+      });
+  }
+
   function handleConfirmAppointment(appointment) {
-    const confirmedAppointment = {...appointment, status : 1};
+    const confirmedAppointment = { ...appointment, status: 1 };
     fetch(api + "appointments/" + appointment.id, {
       method: "PUT",
       body: JSON.stringify(confirmedAppointment),
@@ -83,7 +130,7 @@ export function DcContextProvider(props) {
     });
   }
   function handleCancelAppointment(appointment) {
-    const canceledAppointment = {...appointment, status:2};
+    const canceledAppointment = { ...appointment, status: 2 };
     fetch(api + "appointments/" + appointment.id, {
       method: "PUT",
       body: JSON.stringify(canceledAppointment),
@@ -120,18 +167,28 @@ export function DcContextProvider(props) {
       setUserConfirmed(appointments.filter((ap) => ap.status === 1));
       setUserCanceled(appointments.filter((ap) => ap.status === 2));
     }
-    setUserManager({...manager, clinicName: userClinics.find((cl) => manager.clinicId === cl.id).title});
+    setUserManager({
+      ...manager,
+      clinicName: userClinics.find((cl) => manager.clinicId === cl.id).title,
+    });
   }
 
   const context = {
     languageCode: langCode,
-    setLanguageCode: (code) => {setLangCode(code)},
+    setLanguageCode: (code) => {
+      setLangCode(code);
+    },
     pending: userPending,
     confirmed: userConfirmed,
     canceled: userCanceled,
     currentManager: userManager,
     dentists: userDentists,
     clients: userClients,
+
+    addClient: (client) => {
+      addData(client, "clients", setUserClients);
+    },
+    addAppointment: handleAddAppointment,
 
     confirmAppointment: handleConfirmAppointment,
     cancelAppointment: handleCancelAppointment,
