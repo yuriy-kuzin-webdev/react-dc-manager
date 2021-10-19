@@ -3,6 +3,12 @@ import Table from "react-bootstrap/Table";
 import DcContext from "../store/dc-context";
 import Appointment from "../components/Appointment";
 
+const tabLocales = [
+  ["Dentist","Date","Client","Status","Actions"],
+  [ "Стоматолог", "Дата", "Клиент", "Статус", "Действия"],
+  ["Стоматолог", "Дата", "Клієнт", "Статус", "Дії"]
+]
+
 export default function Confirmed() {
   const context = useContext(DcContext);
   function getDentist(dentistId) {
@@ -20,11 +26,11 @@ export default function Confirmed() {
         <thead>
           <tr>
             <th>#</th>
-            <th>Dentist</th>
-            <th>Date</th>
-            <th>Client</th>
-            <th>Status</th>
-            <th>Action</th>
+            <th>{tabLocales[context.languageCode][0]}</th>
+            <th>{tabLocales[context.languageCode][1]}</th>
+            <th>{tabLocales[context.languageCode][2]}</th>
+            <th>{tabLocales[context.languageCode][3]}</th>
+            <th>{tabLocales[context.languageCode][4]}</th>
           </tr>
         </thead>
         <tbody>
