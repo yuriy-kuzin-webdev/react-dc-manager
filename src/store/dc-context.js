@@ -1,6 +1,9 @@
 import { createContext, useEffect, useState } from "react";
 
 const DcContext = createContext({
+  languageCode: 0,
+  setLanguageCode : (code) => {},
+
   pending: [],
   confirmed: [],
   canceled: [],
@@ -14,7 +17,9 @@ const DcContext = createContext({
 });
 
 export function DcContextProvider(props) {
-  const api = "https://localhost:44328/api/";
+  const api = "http://localhost:31437/api/";
+
+  const [langCode, setLangCode] = useState(2);
 
   const [userAppointments, setUserAppointments] = useState([]);
   const [userClients, setUserClients] = useState([]);
@@ -61,9 +66,10 @@ export function DcContextProvider(props) {
   }, []);
 
   function handleConfirmAppointment(appointment) {
+    const confirmedAppointment = {...appointment, status : 1};
     fetch(api + "appointments/" + appointment.id, {
       method: "PUT",
-      body: JSON.stringify({...appointment, status:'confirmed'}),
+      body: JSON.stringify(confirmedAppointment),
       headers: {
         "Content-Type": "application/json",
       },
@@ -72,14 +78,15 @@ export function DcContextProvider(props) {
         return prev.filter((a) => a.id !== appointment.id);
       });
       setUserConfirmed((prev) => {
-        return prev.concat(appointment);
+        return prev.concat(confirmedAppointment);
       });
     });
   }
   function handleCancelAppointment(appointment) {
+    const canceledAppointment = {...appointment, status:2};
     fetch(api + "appointments/" + appointment.id, {
       method: "PUT",
-      body: JSON.stringify({...appointment, status:'canceled'}),
+      body: JSON.stringify(canceledAppointment),
       headers: {
         "Content-Type": "application/json",
       },
@@ -94,7 +101,7 @@ export function DcContextProvider(props) {
         });
       }
       setUserCanceled((prev) => {
-        return prev.concat(appointment);
+        return prev.concat(canceledAppointment);
       });
     });
   }
@@ -109,14 +116,16 @@ export function DcContextProvider(props) {
       const appointments = userAppointments.filter((appointment) =>
         dentists.some((dentist) => dentist.id === appointment.dentistId)
       );
-      setUserPending(appointments.filter((ap) => ap.status === "pending"));
-      setUserConfirmed(appointments.filter((ap) => ap.status === "confirmed"));
-      setUserCanceled(appointments.filter((ap) => ap.status === "canceled"));
+      setUserPending(appointments.filter((ap) => ap.status === 0));
+      setUserConfirmed(appointments.filter((ap) => ap.status === 1));
+      setUserCanceled(appointments.filter((ap) => ap.status === 2));
     }
     setUserManager({...manager, clinicName: userClinics.find((cl) => manager.clinicId === cl.id).title});
   }
 
   const context = {
+    languageCode: langCode,
+    setLanguageCode: (code) => {setLangCode(code)},
     pending: userPending,
     confirmed: userConfirmed,
     canceled: userCanceled,

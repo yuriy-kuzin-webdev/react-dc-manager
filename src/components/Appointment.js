@@ -6,7 +6,7 @@ import DcContext from "../store/dc-context";
 
 const dateLocales = ["en-Us", "ru-Ru", "uk-UA"];
 const confirmLocales = ["Confirm", "Подтвердить", "Підтвердити"];
-const cancelLocales = ["Cancel","","Отменить", "Скасувати"];
+const cancelLocales = ["Cancel","Отменить", "Скасувати"];
 const dentistLocales = ["name","nameRu","nameUa"];
 const statusLocales = [
   ["Pending","Confirmed","Canceled"],
