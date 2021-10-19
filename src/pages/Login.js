@@ -3,6 +3,12 @@ import { Form, Button, Card, Alert, Container } from "react-bootstrap";
 import DcContext from "../store/dc-context";
 import { useHistory } from "react-router-dom";
 
+const textLocales = [
+  ["Log in", "Username", "Password", "Log in"],
+  ["Вход", "Имя пользователя", "Пароль", "Войти"],
+  ["Вхід", "Ім'я користувача", "Пароль", "Увійти"],
+];
+
 export default function Signup() {
   const userNameRef = useRef();
   const passwordRef = useRef();
@@ -32,11 +38,11 @@ export default function Signup() {
       <div className="w-100" style={{ maxWidth: "400px" }}>
         <Card>
           <Card.Body>
-            <h2 className="text-center mb-4">Log in</h2>
+            <h2 className="text-center mb-4">{textLocales[context.languageCode][0]}</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group id="userNasme">
-                <Form.Label>Username</Form.Label>
+                <Form.Label>{textLocales[context.languageCode][1]}</Form.Label>
                 <Form.Control
                   type="text"
                   required
@@ -44,7 +50,7 @@ export default function Signup() {
                 ></Form.Control>
               </Form.Group>
               <Form.Group id="password">
-                <Form.Label>Password</Form.Label>
+                <Form.Label>{textLocales[context.languageCode][2]}</Form.Label>
                 <Form.Control
                   type="password"
                   required
@@ -60,7 +66,7 @@ export default function Signup() {
                   margin: "2rem 0",
                 }}
               >
-                Log In
+                {textLocales[context.languageCode][3]}
               </Button>
             </Form>
           </Card.Body>
