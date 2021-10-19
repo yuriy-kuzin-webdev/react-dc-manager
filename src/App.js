@@ -5,6 +5,7 @@ import Canceled from "./pages/Canceled";
 import Confirmed from "./pages/Confirmed";
 import Pending from "./pages/Pending";
 import Login from './pages/Login'
+import Clients from "./pages/Clients";
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" exact>
           <Login/>
         </Route>
+        <PrivateRoute path='/clients' component={Clients}/>
         <PrivateRoute path='/pending' component={Pending}/>
         <PrivateRoute path='/confirmed' component={Confirmed}/>
         <PrivateRoute path='/canceled' component={Canceled}/>

@@ -5,10 +5,10 @@ import DcContext from "../../store/dc-context";
 import Form from "react-bootstrap/Form";
 
 const menuLocale = [
-  ["Pending","Confirmed","Canceled"],
-  ["Ожидает рассмотрения ","Подтверждено","Отменено"],
-  ["Очікує на розгляд", "Підтверджено", "Скасовано"]
-]
+  ["Pending", "Confirmed", "Canceled", "Clients"],
+  ["Ожидает рассмотрения", "Подтверждено", "Отменено","Клиенты"],
+  ["Очікує на розгляд", "Підтверджено", "Скасовано","Клiенти"],
+];
 
 export default function MainNavigation() {
   const context = useContext(DcContext);
@@ -26,6 +26,9 @@ export default function MainNavigation() {
       </div>
       <nav>
         <ul>
+          <li>
+            <Link to="/clients">{menuLocale[context.languageCode][3]}</Link>
+          </li>
           <li>
             <Link to="/pending">{menuLocale[context.languageCode][0]}</Link>
           </li>
