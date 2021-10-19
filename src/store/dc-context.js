@@ -19,7 +19,7 @@ const DcContext = createContext({
 export function DcContextProvider(props) {
   const api = "http://localhost:31437/api/";
 
-  const [langCode, setLangCode] = useState(2);
+  const [langCode, setLangCode] = useState(0);
 
   const [userAppointments, setUserAppointments] = useState([]);
   const [userClients, setUserClients] = useState([]);
